@@ -56,15 +56,23 @@
 		0470AE5B24B5811B00D90937 /* RickMortyNetworking */ = {
 			isa = PBXGroup;
 			children = (
-				0470AE5C24B5811B00D90937 /* AppDelegate.swift */,
-				0470AE5E24B5811B00D90937 /* SceneDelegate.swift */,
 				0470AE6024B5811B00D90937 /* ViewController.swift */,
 				0470AE6224B5811B00D90937 /* Main.storyboard */,
+				0470AE7024B5813F00D90937 /* Resources */,
+			);
+			path = RickMortyNetworking;
+			sourceTree = "<group>";
+		};
+		0470AE7024B5813F00D90937 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0470AE5C24B5811B00D90937 /* AppDelegate.swift */,
+				0470AE5E24B5811B00D90937 /* SceneDelegate.swift */,
 				0470AE6524B5811E00D90937 /* Assets.xcassets */,
 				0470AE6724B5811E00D90937 /* LaunchScreen.storyboard */,
 				0470AE6A24B5811E00D90937 /* Info.plist */,
 			);
-			path = RickMortyNetworking;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,7 +294,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 94ZMA2MYR4;
-				INFOPLIST_FILE = RickMortyNetworking/Info.plist;
+				INFOPLIST_FILE = RickMortyNetworking/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -304,7 +312,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 94ZMA2MYR4;
-				INFOPLIST_FILE = RickMortyNetworking/Info.plist;
+				INFOPLIST_FILE = RickMortyNetworking/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
