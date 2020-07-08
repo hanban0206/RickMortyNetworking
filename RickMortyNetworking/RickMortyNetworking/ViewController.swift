@@ -10,11 +10,36 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let rickAndMortyController = RickAndMortyController()
+    
+    @IBOutlet weak var testImageView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        testNetworking()
     }
 
+    func testNetworking() {
+        rickAndMortyController.getCharacters { _ in
+            
+        }
+        
+        rickAndMortyController.getFilterQueryItems(name: "rick", status: Status(rawValue: Status.alive.rawValue), gender: nil)
+        let items = rickAndMortyController.queryItems
+        
+        rickAndMortyController.filteredCharacterSearch(queryItems: items) { _ in
+            DispatchQueue.main.async {
+                self.updateView()
+            }
+        }
+    }
+    
+    func updateView() {
+        guard let first = rickAndMortyController.characters.first else { return }
+        let data = try! Data(contentsOf: first.image)
+        testImageView.image = UIImage(data: data)
+    }
 
 }
 
