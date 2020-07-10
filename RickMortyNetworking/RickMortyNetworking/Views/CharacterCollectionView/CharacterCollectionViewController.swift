@@ -10,13 +10,36 @@ import UIKit
 
 
 class CharacterCollectionViewController: UICollectionViewController {
-
+    
     // MARK: - Private Properties
     
     private let apiController = RickAndMortyController()
     
     private var gender: Gender?
     private var status: Status?
+    
+    private lazy var noResultsLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
+            NSLayoutConstraint(
+                item: label,
+                attribute: .centerY,
+                relatedBy: .equal,
+                toItem: collectionView,
+                attribute: .centerY,
+                multiplier: 0.7, constant: 0
+            )
+        ])
+        
+        label.isHidden = true
+        
+        return label
+    }()
     
     // MARK: - View Lifecycle
     
@@ -36,14 +59,15 @@ class CharacterCollectionViewController: UICollectionViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search for a character"
         searchController.searchBar.delegate = self
+        searchController.
         self.navigationItem.searchController = searchController
     }
     
     // MARK: - Navigation
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navController = segue.destination as? UINavigationController,
-           let filterTVC = navController.topViewController as? FilterTableViewController {
+            let filterTVC = navController.topViewController as? FilterTableViewController {
             filterTVC.delegate = self
             filterTVC.gender = gender
             filterTVC.status = status
@@ -51,29 +75,31 @@ class CharacterCollectionViewController: UICollectionViewController {
     }
     
     // MARK: UICollectionViewDataSource
-
+    
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
-
+    
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return apiController.characters.count
+        let characterCount = apiController.characters.count
+        noResultsLabel.isHidden = characterCount != 0
+        return characterCount
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView
             .dequeueReusableCell(withReuseIdentifier: "CharacterCell", for: indexPath) as? CharacterCell else {
-            fatalError("Unable to cast cell as \(CharacterCell.self)")
+                fatalError("Unable to cast cell as \(CharacterCell.self)")
         }
-
+        
         cell.layer.cornerRadius = 8
         cell.apiController = apiController
         cell.character = apiController.characters[indexPath.row]
-    
+        
         return cell
     }
-
+    
 }
 
 // MARK: - Flow Layout Delegate
@@ -88,7 +114,7 @@ extension CharacterCollectionViewController: UICollectionViewDelegateFlowLayout 
         
         return CGSize(width: width, height: width * 1.35)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return padding
     }
@@ -104,10 +130,19 @@ extension CharacterCollectionViewController: UISearchResultsUpdating, UISearchBa
     func updateSearchResults(for searchController: UISearchController) {}
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let queryItems = apiController.getFilterQueryItems(name: searchBar.text, status: status, gender: gender)
+        guard let searchTerm = searchBar.text else { return }
+        noResultsLabel.text = "No results found for \(searchTerm)"
+        noResultsLabel.isHidden = true
+        let queryItems = apiController.getFilterQueryItems(name: searchTerm, status: status, gender: gender)
         apiController.filteredCharacterSearch(queryItems: queryItems) { (error) in
             if let error = error {
                 print(error)
+                let alert = UIAlertController(title: "Network Error", message: "Check your internet connection", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default)
+                alert.addAction(okAction)
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true)
+                }
             } else {
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
