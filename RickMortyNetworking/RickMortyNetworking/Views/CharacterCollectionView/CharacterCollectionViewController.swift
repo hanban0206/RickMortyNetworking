@@ -114,6 +114,7 @@ extension CharacterCollectionViewController: UISearchResultsUpdating, UISearchBa
                 }
             }
         }
+        self.navigationItem.searchController?.isActive = false
     }
     
 }
