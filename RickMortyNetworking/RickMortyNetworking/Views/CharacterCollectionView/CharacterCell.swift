@@ -30,4 +30,11 @@ class CharacterCell: UICollectionViewCell {
         self.nameLabel.text = character.name
         self.speciesLabel.text = character.species
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.imageView.image = nil
+        self.nameLabel.text = nil
+        self.speciesLabel.text = nil
+    }
 }
