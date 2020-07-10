@@ -100,22 +100,48 @@
             <point key="canvasLocation" x="1115.9420289855072" y="-48.214285714285715"/>
         </scene>
         <!--Filters-->
-        <scene sceneID="GpF-MO-1sB">
+        <scene sceneID="N7a-LF-dvP">
             <objects>
-                <viewController id="1Wo-tw-Rl9" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="BzA-mn-RND">
+                <tableViewController id="TRw-09-TeI" customClass="FilterTableViewController" customModule="RickMortyNetworking" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="l0Y-Or-DUo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="ixh-LO-wDa"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Filters" id="kty-1P-FxF">
-                        <barButtonItem key="leftBarButtonItem" image="xmark" catalog="system" id="j6i-h2-cGn"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FilterCell" textLabel="vDp-SR-auw" style="IBUITableViewCellStyleDefault" id="h8e-4E-DGK">
+                                <rect key="frame" x="20" y="55.5" width="374" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="h8e-4E-DGK" id="BMA-9L-CdU">
+                                    <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vDp-SR-auw">
+                                            <rect key="frame" x="20" y="0.0" width="334" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="TRw-09-TeI" id="LeC-g9-x5B"/>
+                            <outlet property="delegate" destination="TRw-09-TeI" id="Bwi-4E-ch2"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Filters" id="xbG-BV-yNE">
+                        <barButtonItem key="leftBarButtonItem" image="xmark" catalog="system" id="tWa-j4-nIa">
+                            <connections>
+                                <action selector="dismissView:" destination="TRw-09-TeI" id="JyR-fF-gbh"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zUT-p3-idc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HPO-7R-aAx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3673.913043478261" y="-48.214285714285715"/>
+            <point key="canvasLocation" x="3581" y="-48"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="6BJ-RR-n1j">
@@ -128,7 +154,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="1Wo-tw-Rl9" kind="relationship" relationship="rootViewController" id="9mF-H1-oQG"/>
+                        <segue destination="TRw-09-TeI" kind="relationship" relationship="rootViewController" id="66s-Nc-DVQ"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TkB-2O-beY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

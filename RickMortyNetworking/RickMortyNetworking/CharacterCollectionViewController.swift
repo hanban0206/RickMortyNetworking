@@ -11,6 +11,15 @@ import UIKit
 
 class CharacterCollectionViewController: UICollectionViewController {
 
+    // MARK: - Private Properties
+    
+    private let apiController = RickAndMortyController()
+    
+    private var gender: Gender?
+    private var status: Status?
+    
+    // MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let searchController = UISearchController()
@@ -21,17 +30,15 @@ class CharacterCollectionViewController: UICollectionViewController {
         self.navigationItem.searchController = searchController
 
     }
-
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
+        if let filterTVC = segue.destination as? FilterTableViewController {
+            filterTVC.delegate = self
+        }
     }
-    */
-
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -40,7 +47,7 @@ class CharacterCollectionViewController: UICollectionViewController {
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return apiController.characters.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -53,6 +60,8 @@ class CharacterCollectionViewController: UICollectionViewController {
     }
 
 }
+
+// MARK: - Flow Layout Delegate
 
 private let padding: CGFloat = 10
 private let numRows: CGFloat = 2
@@ -74,13 +83,34 @@ extension CharacterCollectionViewController: UICollectionViewDelegateFlowLayout 
     }
 }
 
+// MARK: - Search Delegate
+
 extension CharacterCollectionViewController: UISearchResultsUpdating, UISearchBarDelegate{
-    func updateSearchResults(for searchController: UISearchController) {
-        
-    }
+    func updateSearchResults(for searchController: UISearchController) {}
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("Fetch the search results")
+        let queryItems = apiController.getFilterQueryItems(name: searchBar.text, status: status, gender: gender)
+        apiController.filteredCharacterSearch(queryItems: queryItems) { (error) in
+            if let error = error {
+                print(error)
+            } else {
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
     
+}
+
+// MARK: - Filter Delegate
+
+extension CharacterCollectionViewController: FilterDelegate {
+    func filterDidSelect(gender: Gender?) {
+        self.gender = gender
+    }
+    
+    func filterDidSelect(status: Status?) {
+        self.status = status
+    }
 }
