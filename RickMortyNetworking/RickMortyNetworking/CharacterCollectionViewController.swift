@@ -22,20 +22,35 @@ class CharacterCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureSearchController()
+        apiController.getAllCharacters { (error) in
+            if let error = error {
+                print(error)
+            } else {
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
+    }
+    
+    func configureSearchController() {
         let searchController = UISearchController()
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search for a character"
         searchController.searchBar.delegate = self
         self.navigationItem.searchController = searchController
-
     }
     
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let filterTVC = segue.destination as? FilterTableViewController {
+        if let navController = segue.destination as? UINavigationController,
+           let filterTVC = navController.topViewController as? FilterTableViewController {
             filterTVC.delegate = self
+            filterTVC.gender = gender
+            filterTVC.status = status
         }
     }
     
@@ -51,10 +66,13 @@ class CharacterCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CharacterCell", for: indexPath)
-    
-        cell.backgroundColor = .systemGray4
+        guard let cell = collectionView
+            .dequeueReusableCell(withReuseIdentifier: "CharacterCell", for: indexPath) as? CharacterCell else {
+            fatalError("Unable to cast cell as \(CharacterCell.self)")
+        }
+
         cell.layer.cornerRadius = 8
+        cell.character = apiController.characters[indexPath.row]
     
         return cell
     }
@@ -71,7 +89,7 @@ extension CharacterCollectionViewController: UICollectionViewDelegateFlowLayout 
         let totalPadding = padding * (numRows + 1)
         let width = (collectionView.frame.width - totalPadding) / numRows
         
-        return CGSize(width: width, height: width)
+        return CGSize(width: width, height: width * 1.35)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

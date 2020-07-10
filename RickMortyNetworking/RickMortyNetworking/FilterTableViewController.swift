@@ -15,10 +15,33 @@ protocol FilterDelegate: AnyObject {
 
 class FilterTableViewController: UITableViewController {
 
+    // MARK: - Public Properties
+    
     weak var delegate: FilterDelegate?
+    
+    var gender: Gender? { didSet { delegate?.filterDidSelect(gender: gender) }}
+    var status: Status? { didSet { delegate?.filterDidSelect(status: status) }}
+    
+    // MARK: - IBActions
     
     @IBAction func dismissView(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
+    }
+    
+    // MARK: - View Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if let gender = gender, let row = Gender.allCases.firstIndex(of: gender) {
+            let indexPath = IndexPath(row: row, section: 0)
+            tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+        }
+        
+        if let status = status, let row = Status.allCases.firstIndex(of: status) {
+            let indexPath = IndexPath(row: row, section: 1)
+            tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+        }
     }
     
     // MARK: - Table View Data Source
@@ -45,25 +68,31 @@ class FilterTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FilterCell", for: indexPath)
-
-        cell.textLabel?.text = Gender.allCases[indexPath.row].rawValue.capitalized
+        
+        if indexPath.section == 0 {
+            cell.textLabel?.text = Gender.allCases[indexPath.row].rawValue.capitalized
+        } else {
+            cell.textLabel?.text = Status.allCases[indexPath.row].rawValue.capitalized
+        }
 
         return cell
     }
     
+    // MARK: - Table View Delegate
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            delegate?.filterDidSelect(gender: Gender.allCases[indexPath.row])
+            gender = Gender.allCases[indexPath.row]
         } else {
-            delegate?.filterDidSelect(status: Status.allCases[indexPath.row])
+            status = Status.allCases[indexPath.row]
         }
     }
     
     override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         if indexPath.section == 0 {
-            delegate?.filterDidSelect(gender: nil)
+            gender = nil
         } else {
-            delegate?.filterDidSelect(status: nil)
+            status = nil
         }
         
         return indexPath

@@ -46,22 +46,63 @@
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="53W-p7-a2q">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="3m5-6B-PHh">
-                            <size key="itemSize" width="241" height="265"/>
+                            <size key="itemSize" width="241" height="310"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CharacterCell" id="e8f-KP-KhQ">
-                                <rect key="frame" x="86.5" y="0.0" width="241" height="265"/>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CharacterCell" id="e8f-KP-KhQ" customClass="CharacterCell" customModule="RickMortyNetworking" customModuleProvider="target">
+                                <rect key="frame" x="86.5" y="0.0" width="241" height="310"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="iRr-Dp-jt1">
-                                    <rect key="frame" x="0.0" y="0.0" width="241" height="265"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="241" height="310"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vWo-Sp-3sb">
+                                            <rect key="frame" x="0.0" y="0.0" width="241" height="302"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P05-By-2MN">
+                                                    <rect key="frame" x="0.0" y="0.0" width="241" height="241"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="P05-By-2MN" secondAttribute="height" multiplier="1:1" id="jhS-3D-fen"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qSN-mK-HL0">
+                                                    <rect key="frame" x="96" y="250.5" width="49.5" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Species" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H3n-37-kA4">
+                                                    <rect key="frame" x="90.5" y="281.5" width="60.5" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="P05-By-2MN" secondAttribute="trailing" id="NEL-uQ-Uhb"/>
+                                                <constraint firstItem="P05-By-2MN" firstAttribute="leading" secondItem="vWo-Sp-3sb" secondAttribute="leading" id="djJ-qy-Fza"/>
+                                            </constraints>
+                                        </stackView>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="vWo-Sp-3sb" secondAttribute="trailing" id="4gB-og-Y8c"/>
+                                        <constraint firstItem="vWo-Sp-3sb" firstAttribute="leading" secondItem="iRr-Dp-jt1" secondAttribute="leading" id="XN8-w8-yF0"/>
+                                        <constraint firstItem="vWo-Sp-3sb" firstAttribute="top" secondItem="iRr-Dp-jt1" secondAttribute="top" id="cRs-b9-ihw"/>
+                                        <constraint firstAttribute="bottom" secondItem="vWo-Sp-3sb" secondAttribute="bottom" constant="8" id="tWY-S9-3vb"/>
+                                    </constraints>
                                 </collectionViewCellContentView>
-                                <size key="customSize" width="241" height="265"/>
+                                <size key="customSize" width="241" height="310"/>
+                                <connections>
+                                    <outlet property="imageView" destination="P05-By-2MN" id="RNV-K5-GoE"/>
+                                    <outlet property="nameLabel" destination="qSN-mK-HL0" id="NNm-Od-h8b"/>
+                                    <outlet property="speciesLabel" destination="H3n-37-kA4" id="NnB-Y1-aS7"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
