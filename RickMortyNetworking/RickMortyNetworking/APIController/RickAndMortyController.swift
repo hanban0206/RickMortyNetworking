@@ -67,6 +67,7 @@ class RickAndMortyController {
             if let response = response as? HTTPURLResponse,
                 response.statusCode != 200 {
                 print("Bad response code: \(response)")
+                self.characters = []
                 completion(error)
                 return
             }
