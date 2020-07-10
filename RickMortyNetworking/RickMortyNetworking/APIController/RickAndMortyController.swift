@@ -83,9 +83,8 @@ class RickAndMortyController {
             
             do {
                 let filteredSearch = try JSONDecoder().decode(CharacterSearch.self, from: data)
-                filteredSearch.results.forEach { character in
-                    self.characters.append(character)
-                }
+                self.characters = filteredSearch.results
+                
                 completion(nil)
             } catch {
                 print("Error decoding character objects: \(error)")
