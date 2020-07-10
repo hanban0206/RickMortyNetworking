@@ -6,7 +6,7 @@
 //  Copyright © 2020 Swift Student. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class RickAndMortyController {
     
@@ -21,49 +21,8 @@ class RickAndMortyController {
     private lazy var characterURL = URL(string: "/api/character", relativeTo: baseURL)!
     
     var characters: [Character] = []
-    var queryItems: [URLQueryItem] = []
     
-    func getCharacters(completion: @escaping (Error?) -> Void) {
-
-        var request = URLRequest(url: characterURL)
-        request.httpMethod = HTTPMethod.get.rawValue
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let response = response as? HTTPURLResponse,
-                response.statusCode != 200 {
-                print("Bad response code: \(response)")
-                completion(error)
-                return
-            }
-            
-            if let error = error {
-                print("Error fetching characters: \(error)")
-                completion(error)
-                return
-            }
-            
-            guard let data = data else {
-                print("Bad or no data returned from data task")
-                completion(error)
-                return
-            }
-            
-            do {
-                let characterSearch = try JSONDecoder().decode(CharacterSearch.self, from: data)
-//                self.characters = characterSearch.results
-                characterSearch.results.forEach { character in
-                    self.characters.append(character)
-                }
-                completion(nil)
-            } catch {
-                print("Error decoding character objects: \(error)")
-                completion(error)
-                return
-            }
-        }.resume()
-    }
-    
-    func getFilterQueryItems(name: String?, status: Status?, gender: Gender?) {
+    func getFilterQueryItems(name: String?, status: Status?, gender: Gender?) -> [URLQueryItem] {
         
         var items: [URLQueryItem] = []
         
@@ -81,7 +40,8 @@ class RickAndMortyController {
             let genderQuery = URLQueryItem(name: "gender", value: gender.rawValue)
             items.append(genderQuery)
         }
-        self.queryItems = items
+    
+        return items
     }
     
     func filteredCharacterSearch(queryItems: [URLQueryItem], completion: @escaping (Error?) -> Void) {
@@ -89,20 +49,24 @@ class RickAndMortyController {
         var urlComponents = URLComponents(url: characterURL, resolvingAgainstBaseURL: true)
         urlComponents?.queryItems = queryItems
         
-        guard let requestURL = urlComponents?.url else { return }
+        guard let requestURL = urlComponents?.url else {
+            completion(NSError())
+            return
+        }
+        
         var request = URLRequest(url: requestURL)
         request.httpMethod = HTTPMethod.get.rawValue
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if let response = response as? HTTPURLResponse,
-                response.statusCode != 200 {
-                print("Bad response code: \(response)")
+            if let error = error {
+                print("Error fetching filtered characters: \(error)")
                 completion(error)
                 return
             }
             
-            if let error = error {
-                print("Error fetching filtered characters: \(error)")
+            if let response = response as? HTTPURLResponse,
+                response.statusCode != 200 {
+                print("Bad response code: \(response)")
                 completion(error)
                 return
             }
@@ -114,8 +78,8 @@ class RickAndMortyController {
             }
             
             // I like to show this as its a convenient way to print the json you are trying to parse and in my opinion looks better than pretty printed
-            let json = try! JSONSerialization.jsonObject(with: data)
-            print(json)
+//            let json = try! JSONSerialization.jsonObject(with: data)
+//            print(json)
             
             do {
                 let filteredSearch = try JSONDecoder().decode(CharacterSearch.self, from: data)
@@ -127,6 +91,29 @@ class RickAndMortyController {
                 print("Error decoding character objects: \(error)")
                 completion(error)
                 return
+            }
+        }.resume()
+    }
+    
+    func getImage(imageURL: URL, completion: @escaping (UIImage?) -> Void) {
+        let request = URLRequest(url: imageURL)
+        if let urlResponse = URLCache.shared.cachedResponse(for: request) {
+            let charImage = UIImage(data: urlResponse.data)
+            completion(charImage)
+            return
+        }
+        
+        URLSession.shared.dataTask(with: imageURL) { data, response, error in
+            if let error = error {
+                print("Error retrieving character image \(error)")
+                completion(nil)
+            }
+            
+            if let data = data, let response = response {
+                let cachedResponse = CachedURLResponse(response: response, data: data)
+                URLCache.shared.storeCachedResponse(cachedResponse, for: request)
+                let characterImage = UIImage(data: data)
+                completion(characterImage)
             }
         }.resume()
     }

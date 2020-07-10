@@ -16,11 +16,17 @@ class CharacterCell: UICollectionViewCell {
     // MARK: - Public Properties
     
     var character: Character? { didSet { updateViews() }}
+    var apiController: RickAndMortyController?
+    
     
     func updateViews() {
         guard let character = character else { return }
+        apiController?.getImage(imageURL: character.image) { image in
+            DispatchQueue.main.async {
+                self.imageView.image = image
+            }
+        }
         
-        self.imageView.image = UIImage(data: try! Data(contentsOf: character.image))
         self.nameLabel.text = character.name
         self.speciesLabel.text = character.species
     }

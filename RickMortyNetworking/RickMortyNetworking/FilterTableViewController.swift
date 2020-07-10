@@ -81,6 +81,12 @@ class FilterTableViewController: UITableViewController {
     // MARK: - Table View Delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) else { return }
+        if cell.isSelected {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
         if indexPath.section == 0 {
             gender = Gender.allCases[indexPath.row]
         } else {

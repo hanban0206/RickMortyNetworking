@@ -23,13 +23,9 @@ class CharacterCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSearchController()
-        apiController.getAllCharacters { (error) in
-            if let error = error {
-                print(error)
-            } else {
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
+        apiController.filteredCharacterSearch(queryItems: []) { _ in
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
             }
         }
     }
@@ -72,6 +68,7 @@ class CharacterCollectionViewController: UICollectionViewController {
         }
 
         cell.layer.cornerRadius = 8
+        cell.apiController = apiController
         cell.character = apiController.characters[indexPath.row]
     
         return cell
