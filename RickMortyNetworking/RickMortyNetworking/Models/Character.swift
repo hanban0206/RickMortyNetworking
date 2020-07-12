@@ -8,15 +8,4 @@
 
 import Foundation
 
-struct CharacterSearch: Decodable {
-    let results: [Character]
-}
-
-struct Character: Decodable {
-    let id: Int
-    let name: String
-    let species: String
-    let type: String
-    let gender: String
-    let image: URL
-}
+// TODO: Define model here

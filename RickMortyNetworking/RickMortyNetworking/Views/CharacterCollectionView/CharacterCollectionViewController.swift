@@ -46,11 +46,8 @@ class CharacterCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSearchController()
-        apiController.filteredCharacterSearch(queryItems: []) { _ in
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
+        
+        // TODO: Make call to get all characters
     }
     
     private func configureSearchController() {
@@ -80,9 +77,12 @@ class CharacterCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let characterCount = apiController.characters.count
-        noResultsLabel.isHidden = characterCount != 0
-        return characterCount
+        // TODO: Uncomment below after creating character array in RickAndMortyController
+//        let characterCount = apiController.characters.count
+//        noResultsLabel.isHidden = characterCount != 0
+//        return characterCount
+        
+        return 1 // TODO: Delete this line
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -93,7 +93,9 @@ class CharacterCollectionViewController: UICollectionViewController {
         
         cell.layer.cornerRadius = 8
         cell.apiController = apiController
-        cell.character = apiController.characters[indexPath.row]
+        
+        // TODO: Uncomment below after creating character array in RickAndMortyController
+//        cell.character = apiController.characters[indexPath.row]
         
         return cell
     }
@@ -132,23 +134,9 @@ extension CharacterCollectionViewController: UISearchResultsUpdating, UISearchBa
         noResultsLabel.text = "No results found for \(searchTerm)"
         noResultsLabel.isHidden = true
         
-        let queryItems = apiController.getFilterQueryItems(name: searchTerm, status: status, gender: gender)
+        // TODO: Get query items
         
-        apiController.filteredCharacterSearch(queryItems: queryItems) { (error) in
-            if let error = error {
-                print(error)
-                let alert = UIAlertController(title: "Network Error", message: "Please check your internet connection", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default)
-                alert.addAction(okAction)
-                DispatchQueue.main.async {
-                    self.present(alert, animated: true)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
-            }
-        }
+        // TODO: Perform search
         
         self.navigationItem.searchController?.isActive = false
     }

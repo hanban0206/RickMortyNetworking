@@ -19,119 +19,24 @@ class RickAndMortyController {
     
     // MARK: - Public Properties
     
-    private(set) var characters: [Character] = []
+    // TODO: Add an array of characters
     
     // MARK: - Private Properties
     
-    private let baseURL = URL(string: "https://rickandmortyapi.com")!
-    private lazy var characterURL = URL(string: "/api/character", relativeTo: baseURL)!
+    // TODO: Get needed URLs
     
     // MARK: - Public Methods
     
-    func getFilterQueryItems(name: String?, status: Status?, gender: Gender?) -> [URLQueryItem] {
-        
-        var items: [URLQueryItem] = []
-        
-        if let name = name {
-            let nameQuery = URLQueryItem(name: "name", value: name)
-            items.append(nameQuery)
-        }
-        
-        if let status = status {
-            let statusQuery = URLQueryItem(name: "status", value: status.rawValue)
-            items.append(statusQuery)
-        }
-        
-        if let gender = gender {
-            let genderQuery = URLQueryItem(name: "gender", value: gender.rawValue)
-            items.append(genderQuery)
-        }
+    // TODO: Make method to get filter query items
     
-        return items
-    }
     
-    func filteredCharacterSearch(queryItems: [URLQueryItem], completion: @escaping (Error?) -> Void) {
+    
+    
+    // TODO: Make method to perform filtered character search
+    
+    
+    
+    
+    // TODO: Make method to get images
 
-        var urlComponents = URLComponents(url: characterURL, resolvingAgainstBaseURL: true)
-        urlComponents?.queryItems = queryItems
-        
-        guard let requestURL = urlComponents?.url else {
-            completion(NSError())
-            return
-        }
-        
-        var request = URLRequest(url: requestURL)
-        request.httpMethod = HTTPMethod.get.rawValue
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error fetching filtered characters: \(error)")
-                completion(error)
-                return
-            }
-            
-            if let response = response as? HTTPURLResponse,
-                response.statusCode != 200 {
-                if response.statusCode == 404 {
-                    self.characters = [] // No characters found
-                    completion(nil)
-                } else {
-                    print("Bad response code: \(response)")
-                    completion(NSError(domain: "Bad response code", code: response.statusCode))
-                }
-                
-                return
-            }
-            
-            guard let data = data else {
-                print("Bad or no data returned from data task")
-                completion(NSError(domain: "No data", code: 0))
-                return
-            }
-            
-            // I like to show this as its a convenient way to print the json you are trying to parse and in my opinion looks better than pretty printed
-//            let json = try! JSONSerialization.jsonObject(with: data)
-//            print(json)
-            
-            do {
-                let filteredSearch = try JSONDecoder().decode(CharacterSearch.self, from: data)
-                self.characters = filteredSearch.results
-                
-                completion(nil)
-            } catch {
-                print("Error decoding character objects: \(error)")
-                completion(error)
-                return
-            }
-        }.resume()
-    }
-    
-    func getImage(imageURL: URL, completion: @escaping (UIImage?) -> Void) {
-        let request = URLRequest(url: imageURL)
-        
-        // Check to see if this image has already been cached
-        if let urlResponse = URLCache.shared.cachedResponse(for: request) {
-            let characterImage = UIImage(data: urlResponse.data)
-            completion(characterImage)
-            return
-        }
-        
-        // If not, go ahead and perform the request
-        URLSession.shared.dataTask(with: imageURL) { data, response, error in
-            if let error = error {
-                print("Error retrieving character image \(error)")
-                completion(nil)
-            }
-            
-            if let data = data, let response = response {
-                
-                // Then store the response so we don't have to fetch it again next time
-                let cachedResponse = CachedURLResponse(response: response, data: data)
-                URLCache.shared.storeCachedResponse(cachedResponse, for: request)
-                
-                let characterImage = UIImage(data: data)
-                completion(characterImage)
-            }
-        }.resume()
-    }
 }

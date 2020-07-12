@@ -26,14 +26,11 @@ class CharacterCell: UICollectionViewCell {
     private func updateViews() {
         guard let character = character else { return }
         
-        apiController?.getImage(imageURL: character.image) { image in
-            DispatchQueue.main.async {
-                self.imageView.image = image
-            }
-        }
+        // Make call to get image
         
-        self.nameLabel.text = character.name
-        self.speciesLabel.text = character.species
+        // TODO: Uncomment below after creating character model
+//        self.nameLabel.text = character.name
+//        self.speciesLabel.text = character.species
     }
     
     override func prepareForReuse() {
