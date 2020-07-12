@@ -15,7 +15,7 @@ enum Status: String, CaseIterable {
 }
 
 enum Gender: String, CaseIterable {
-    case femail = "female"
+    case female = "female"
     case male = "male"
     case genderless = "genderless"
     case unknown = "unknown"
