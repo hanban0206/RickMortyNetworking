@@ -17,10 +17,16 @@ class RickAndMortyController {
         case delete = "DELETE"
     }
     
+    // MARK: - Public Properties
+    
+    private(set) var characters: [Character] = []
+    
+    // MARK: - Private Properties
+    
     private let baseURL = URL(string: "https://rickandmortyapi.com")!
     private lazy var characterURL = URL(string: "/api/character", relativeTo: baseURL)!
     
-    var characters: [Character] = []
+    // MARK: - Public Methods
     
     func getFilterQueryItems(name: String?, status: Status?, gender: Gender?) -> [URLQueryItem] {
         
@@ -66,15 +72,20 @@ class RickAndMortyController {
             
             if let response = response as? HTTPURLResponse,
                 response.statusCode != 200 {
-                print("Bad response code: \(response)")
-                self.characters = []
-                completion(error)
+                if response.statusCode == 404 {
+                    self.characters = [] // No characters found
+                    completion(nil)
+                } else {
+                    print("Bad response code: \(response)")
+                    completion(NSError(domain: "Bad response code", code: response.statusCode))
+                }
+                
                 return
             }
             
             guard let data = data else {
                 print("Bad or no data returned from data task")
-                completion(error)
+                completion(NSError(domain: "No data", code: 0))
                 return
             }
             
@@ -97,12 +108,15 @@ class RickAndMortyController {
     
     func getImage(imageURL: URL, completion: @escaping (UIImage?) -> Void) {
         let request = URLRequest(url: imageURL)
+        
+        // Check to see if this image has already been cached
         if let urlResponse = URLCache.shared.cachedResponse(for: request) {
-            let charImage = UIImage(data: urlResponse.data)
-            completion(charImage)
+            let characterImage = UIImage(data: urlResponse.data)
+            completion(characterImage)
             return
         }
         
+        // If not, go ahead and perform the request
         URLSession.shared.dataTask(with: imageURL) { data, response, error in
             if let error = error {
                 print("Error retrieving character image \(error)")
@@ -110,8 +124,11 @@ class RickAndMortyController {
             }
             
             if let data = data, let response = response {
+                
+                // Then store the response so we don't have to fetch it again next time
                 let cachedResponse = CachedURLResponse(response: response, data: data)
                 URLCache.shared.storeCachedResponse(cachedResponse, for: request)
+                
                 let characterImage = UIImage(data: data)
                 completion(characterImage)
             }
