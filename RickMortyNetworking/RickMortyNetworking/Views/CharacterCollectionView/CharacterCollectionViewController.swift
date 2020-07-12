@@ -53,13 +53,12 @@ class CharacterCollectionViewController: UICollectionViewController {
         }
     }
     
-    func configureSearchController() {
+    private func configureSearchController() {
         let searchController = UISearchController()
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search for a character"
         searchController.searchBar.delegate = self
-        searchController.
         self.navigationItem.searchController = searchController
     }
     
@@ -80,7 +79,6 @@ class CharacterCollectionViewController: UICollectionViewController {
         return 1
     }
     
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let characterCount = apiController.characters.count
         noResultsLabel.isHidden = characterCount != 0
@@ -99,7 +97,6 @@ class CharacterCollectionViewController: UICollectionViewController {
         
         return cell
     }
-    
 }
 
 // MARK: - Flow Layout Delegate
@@ -131,13 +128,16 @@ extension CharacterCollectionViewController: UISearchResultsUpdating, UISearchBa
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchTerm = searchBar.text else { return }
+        
         noResultsLabel.text = "No results found for \(searchTerm)"
         noResultsLabel.isHidden = true
+        
         let queryItems = apiController.getFilterQueryItems(name: searchTerm, status: status, gender: gender)
+        
         apiController.filteredCharacterSearch(queryItems: queryItems) { (error) in
             if let error = error {
                 print(error)
-                let alert = UIAlertController(title: "Network Error", message: "Check your internet connection", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Network Error", message: "Please check your internet connection", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default)
                 alert.addAction(okAction)
                 DispatchQueue.main.async {
@@ -149,9 +149,9 @@ extension CharacterCollectionViewController: UISearchResultsUpdating, UISearchBa
                 }
             }
         }
+        
         self.navigationItem.searchController?.isActive = false
     }
-    
 }
 
 // MARK: - Filter Delegate

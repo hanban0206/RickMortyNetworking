@@ -9,18 +9,23 @@
 import UIKit
 
 class CharacterCell: UICollectionViewCell {
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet var nameLabel: UILabel!
-    @IBOutlet var speciesLabel: UILabel!
     
     // MARK: - Public Properties
     
     var character: Character? { didSet { updateViews() }}
     var apiController: RickAndMortyController?
     
+    // MARK: - IBOutlets
     
-    func updateViews() {
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var speciesLabel: UILabel!
+    
+    // MARK: - Private Methods
+    
+    private func updateViews() {
         guard let character = character else { return }
+        
         apiController?.getImage(imageURL: character.image) { image in
             DispatchQueue.main.async {
                 self.imageView.image = image
@@ -33,6 +38,7 @@ class CharacterCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         self.imageView.image = nil
         self.nameLabel.text = nil
         self.speciesLabel.text = nil
