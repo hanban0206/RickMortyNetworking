@@ -72,7 +72,7 @@
 				95DBA5B024B58927004FD808 /* Models */,
 				95DBA5AD24B58329004FD808 /* APIController */,
 				0470AE6224B5811B00D90937 /* Main.storyboard */,
-				04CE627524B8E3A900A9C1FE /* Views */,
+				04CE627524B8E3A900A9C1FE /* Screens */,
 				0470AE7024B5813F00D90937 /* Resources */,
 			);
 			path = RickMortyNetworking;
@@ -90,13 +90,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		04CE627324B8E38100A9C1FE /* CharacterCollectionView */ = {
+		04CE627324B8E38100A9C1FE /* CharacterSearch */ = {
 			isa = PBXGroup;
 			children = (
+				04CE627424B8E39800A9C1FE /* FilterTableView */,
 				04CE626B24B6DA0900A9C1FE /* CharacterCollectionViewController.swift */,
 				04CE626F24B8049500A9C1FE /* CharacterCell.swift */,
 			);
-			path = CharacterCollectionView;
+			path = CharacterSearch;
 			sourceTree = "<group>";
 		};
 		04CE627424B8E39800A9C1FE /* FilterTableView */ = {
@@ -108,13 +109,12 @@
 			path = FilterTableView;
 			sourceTree = "<group>";
 		};
-		04CE627524B8E3A900A9C1FE /* Views */ = {
+		04CE627524B8E3A900A9C1FE /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				04CE627324B8E38100A9C1FE /* CharacterCollectionView */,
-				04CE627424B8E39800A9C1FE /* FilterTableView */,
+				04CE627324B8E38100A9C1FE /* CharacterSearch */,
 			);
-			path = Views;
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		95DBA5AD24B58329004FD808 /* APIController */ = {
